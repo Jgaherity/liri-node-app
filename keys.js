@@ -6,5 +6,5 @@ exports.spotify = {
 };
 
 //unsure if this is correct? usually looks like module.exports= myBands
-module.exports = exports.spotify;
+//module.exports = exports.spotify;
 
