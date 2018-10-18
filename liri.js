@@ -8,6 +8,7 @@ var apiKeys = require("./keys.js");
 var Spotify = require('node-spotify-api');
 var request = require('request');
 var moment = require('moment');
+var fs = require('file-system');
 
 var spotify = new Spotify({
     id: apiKeys.spotify.id,
@@ -55,7 +56,7 @@ if (process.argv[2] == 'concert-this' ) {
         console.log("songName: ", songName);
     } else{
         songName = process.argv.slice(3).join(" ");
-        //console.log(songName);   
+        console.log(typeof songName);   
     }
 
     spotify.search({ type: 'track', query: songName, limit: 10}, function(err, data) {
@@ -69,6 +70,7 @@ if (process.argv[2] == 'concert-this' ) {
         console.log("preview link: ", data.tracks.items[0].preview_url);
         console.log("album name: ", data.tracks.items[0].album.name);
     });
+
 } else if (process.argv[2] == 'movie-this' ) {
     // * Title of the movie.
     // * Year the movie came out.
@@ -106,6 +108,71 @@ if (process.argv[2] == 'concert-this' ) {
         console.log("Movie plot: ", result.Plot);
         console.log("Movie plot: ", result.Actors);
     });
+}else if (process.argv[2] == 'do-what-it-says' ) {
+
+    //var songName = "";
+
+    fs.readFile("random.txt", "utf8", function(error, data) {
+
+        // If the code experiences any errors it will log the error to the console.
+        if (error) {
+          return console.log(error);
+        }
+        console.log(data);
+
+         //newName = data.slice(18, 32);
+         newName = data.split(",");
+         
+         newName = newName[1].slice(1, -1);
+         console.log("inside song name: ", newName);
+
+         spotify.search({ type: 'track', query: newName, limit: 10}, function(err, data) {
+            if (err) {
+            return console.log('Error occurred: ' + err);
+            }
+    
+            console.log("search successful \n\n");
+            console.log("artist name: ", data.tracks.items[0].album.artists[0].name);
+            console.log("song name: ", data.tracks.items[0].name);
+            console.log("preview link: ", data.tracks.items[0].preview_url);
+            console.log("album name: ", data.tracks.items[0].album.name);
+        });
+        
+
+    });
+    // console.log("songName: ", songName);
+    // newName = songName.slice(1, 5);
+    // //spotify-this-song,"I Want it That Way"
+    // console.log("new name: ", newName);
+      
+
+
+
+    // //var artist = process.argv[3];
+    // var artist = process.argv.slice(3).join(" ");
+    // var songName;
+    // if (songName = ""){
+    //     songName = "The Sign" //this needs work
+    //     songName = songName.join(" ");
+    //     console.log("songName: ", songName);
+    // } else{
+    //     songName = process.argv.slice(3).join(" ");
+    //     //console.log(songName);   
+    // }
+
+    // spotify.search({ type: 'track', query: songName, limit: 10}, function(err, data) {
+    //     if (err) {
+    //     return console.log('Error occurred: ' + err);
+    //     }
+
+    //     console.log("search successful \n\n");
+    //     console.log("artist name: ", data.tracks.items[0].album.artists[0].name);
+    //     console.log("song name: ", data.tracks.items[0].name);
+    //     console.log("preview link: ", data.tracks.items[0].preview_url);
+    //     console.log("album name: ", data.tracks.items[0].album.name);
+    // });
+
 }
+
 
 
