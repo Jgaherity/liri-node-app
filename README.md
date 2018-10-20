@@ -24,7 +24,7 @@ npm i moment
  
  ```js
 npm i request
- ```M
+ ```
  
  ## get started
  
